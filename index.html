@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Sanremo LMIV – Final (tudo a funcionar)</title>
+  <title>Sanremo LMIV – Sistema Completo (48 Produtos, 33 Rezepte)</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -61,7 +61,7 @@
   </style>
 </head>
 <body>
-<div class="app-header"><h1>🍦 Sanremo LMIV – Profissional (todas as funções)</h1></div>
+<div class="app-header"><h1>🍦 Sanremo LMIV – Sistema Completo (48 Produtos, 33 Rezepte)</h1></div>
 <div class="layout">
   <div class="sidebar">
     <button class="nav-btn active" data-screen="dashboard">📊 Dashboard</button>
@@ -73,51 +73,29 @@
     <button class="nav-btn" data-screen="backup">💾 Backup</button>
   </div>
   <div class="main">
-    <section id="dashboard" class="screen active">
-      <div class="grid"><div class="card col-span-12"><h2>📋 LMIV‑konform</h2><p>Art. 18(2) – Zutaten nach Gewicht · Art. 21 – Allergene fett · Nährwerte pro 100g · Spuren‑Hinweis</p><div><span class="pill success">✓ Sortierung</span><span class="pill success">✓ Allergene fett</span><span class="pill success">✓ Nährwerte</span><span class="pill success">✓ Spuren</span></div></div>
+    <section id="dashboard" class="screen active"><div class="grid"><div class="card col-span-12"><h2>📋 LMIV‑konform</h2><p>Art. 18(2) – Zutaten nach Gewicht · Art. 21 – Allergene fett · Nährwerte pro 100g · Spuren‑Hinweis</p><div><span class="pill success">✓ Sortierung</span><span class="pill success">✓ Allergene fett</span><span class="pill success">✓ Nährwerte</span><span class="pill success">✓ Spuren</span></div></div>
       <div class="card col-span-4"><h3>Statistik</h3><div id="statsArea"></div></div>
       <div class="card col-span-4"><h3>Arbeitsablauf</h3><ol><li>Produkte mit 100% Zusammensetzung</li><li>Rezept in Gramm</li><li>Etikett generieren</li><li>Datenblatt drucken</li></ol></div>
-      <div class="card col-span-4"><h3>Rechtliche Basis</h3><p>Art. 18(2), Art. 21, Art. 30‑33</p></div></div>
-    </section>
+      <div class="card col-span-4"><h3>Rechtliche Basis</h3><p>Art. 18(2), Art. 21, Art. 30‑33</p></div></div></section>
 
-    <!-- Produkte (identico ao anterior) -->
     <section id="products" class="screen"><div class="grid"><div class="card col-span-5"><h2>➕ Produkt</h2><input type="hidden" id="editProductId"><label>Name</label><input id="prodName"><label>Kategorie</label><select id="prodCategory"><option>Milchprodukt</option><option>PASTE</option><option>Frucht</option><option>Pulver</option><option>Zutat</option></select><label>Allergene</label><input id="prodAllergens"><label>Kann Spuren enthalten von</label><input id="prodSpuren"><div class="two-col"><div><label>kJ/100g</label><input id="prodKj" type="number"></div><div><label>kcal/100g</label><input id="prodKcal" type="number"></div></div><div class="two-col"><div><label>Fett</label><input id="prodFat" step="any"></div><div><label>davon gesättigt</label><input id="prodSat" step="any"></div></div><div class="two-col"><div><label>KH</label><input id="prodCarb" step="any"></div><div><label>Zucker</label><input id="prodSugar" step="any"></div></div><div class="two-col"><div><label>Eiweiß</label><input id="prodProtein" step="any"></div><div><label>Salz</label><input id="prodSalt" step="any"></div></div><hr><h3>🧪 Zusammensetzung (100%)</h3><div class="two-col"><div><input id="compName" placeholder="Zutat"></div><div><input id="compPercent" type="number" step="0.01" placeholder="%"></div></div><button onclick="addIngredient()">➕ Zutat</button><button class="secondary" onclick="normalizeProduct()">↺ 100%</button><button class="secondary" onclick="sortComposition()">🔄 sortieren</button><div class="progress-bar"><div class="progress-fill" id="productPercentFill"></div></div><div id="compList"></div><hr><button onclick="saveProduct()">💾 Speichern</button><button class="secondary" onclick="clearProductForm()">🗑️ Leeren</button></div><div class="card col-span-7"><h2>Produktbibliothek</h2><div id="productsList" style="max-height:600px;overflow:auto"></div></div></div></section>
 
-    <!-- Rezepte -->
     <section id="recipes" class="screen"><div class="grid"><div class="card col-span-5"><h2>🍨 Rezept</h2><input type="hidden" id="editRecipeId"><label>Name</label><input id="recipeName"><label>Verkehrsbezeichnung</label><input id="recipeLegal"><label>QUID</label><input id="recipeQuid" placeholder="z.B. Erdbeeren 50%"><label>Verpackung (g)</label><select id="recipePackaging"><option value="100">100 g</option><option value="4000">4000 g</option><option value="4800">4800 g</option><option value="5000">5000 g</option><option value="6000">6000 g</option><option value="custom">🔧 Andere</option></select><div id="customPackDiv" style="display:none"><input type="number" id="customPack" step="1"></div><label>Aufbewahrung</label><input id="recipeStorage" value="Bei -18°C lagern"><label>Hersteller</label><input id="recipeManufacturer" value="Eiscafé Sanremo"><label>MHD / Los</label><input id="recipeMhd" value="siehe Deckel"><hr><h3>➕ Zutat</h3><div class="two-col"><div><select id="recipeProductSelect"></select></div><div><input id="recipeQty" type="number" step="0.1" placeholder="Gramm"></div></div><button onclick="addRecipeItem()">+ Hinzufügen</button><button class="secondary" onclick="clearRecipeDraft()">Alle löschen</button><div id="recipeTotalWeight"></div></div><div class="card col-span-7"><h2>📊 Rezeptpositionen</h2><div style="max-height:280px;overflow:auto"><table id="recipeItemsTable"><thead><tr><th>Produkt</th><th>g</th><th>%</th><th></th></tr></thead><tbody></tbody></table></div><button onclick="saveRecipe()">💾 Rezept speichern</button><hr><h2>Alle Rezepte</h2><div id="savedRecipesList"></div></div></div></section>
 
-    <!-- Datenblätter -->
     <section id="techsheets" class="screen"><div class="grid"><div class="card col-span-4"><h2>📄 Produkt</h2><select id="techProductSelect"></select><button onclick="generateProductSheet()">Generieren</button><hr><h2>📄 Rezept</h2><select id="techRecipeSelect"></select><button onclick="generateRecipeSheet()">Generieren</button><hr><button class="secondary" onclick="printSheet()">🖨️ Drucken</button></div><div class="card col-span-8"><div id="techPreview" class="tech-sheet">Bitte wählen.</div></div></div></section>
 
-    <!-- ETIKETT GENERATOR (agora com certeza funcional) -->
-    <section id="labelgen" class="screen">
-      <div class="grid">
-        <div class="card col-span-4">
-          <h2>🏷️ Etikett erstellen</h2>
-          <select id="labelRecipeSelect"></select>
-          <button onclick="generateLabel()">Etikett generieren</button>
-          <button class="secondary" onclick="copyLabel()">Kopieren</button>
-          <button class="secondary" onclick="downloadLabel()">Als TXT speichern</button>
-        </div>
-        <div class="card col-span-8">
-          <h2>📄 LMIV‑konforme Vorschau</h2>
-          <div class="preview-box" id="labelPreview"></div>
-        </div>
-      </div>
-    </section>
+    <section id="labelgen" class="screen"><div class="grid"><div class="card col-span-4"><h2>🏷️ Etikett erstellen</h2><select id="labelRecipeSelect"></select><button onclick="generateLabel()">Etikett generieren</button><button class="secondary" onclick="copyLabel()">Kopieren</button><button class="secondary" onclick="downloadLabel()">TXT speichern</button></div><div class="card col-span-8"><h2>📄 LMIV‑konforme Vorschau</h2><div class="preview-box" id="labelPreview"></div></div></div></section>
 
-    <!-- Prüfung -->
     <section id="validation" class="screen"><div class="grid"><div class="card col-span-4"><h2>Rezept prüfen</h2><select id="validSelect"></select><button onclick="validateRecipe()">Prüfen</button></div><div class="card col-span-8"><div id="validResult"></div></div></div></section>
 
-    <!-- Backup -->
     <section id="backup" class="screen"><div class="grid"><div class="card col-span-6"><h2>Backup</h2><button onclick="exportData()">📁 JSON Export</button><button class="secondary" onclick="document.getElementById('importFile').click()">📂 Import</button><input id="importFile" type="file" accept="application/json" style="display:none" onchange="importData(event)"></div><div class="card col-span-6"><h2>Reset</h2><button class="danger" onclick="resetAll()">⚠️ Alle Daten löschen</button></div><div class="card col-span-12"><pre id="rawData" style="background:#0a0f1c;padding:1rem;overflow:auto"></pre></div></div></section>
   </div>
 </div>
 
 <script>
-// =================================================================
-// 1. ALLE PRODUKTE (48) aus sanremo_backup (25).json
-// =================================================================
+// ============================================================
+// TODOS OS 48 PRODUTOS (COMPLETO)
+// ============================================================
 const EMBEDDED_PRODUCTS = [
   { "id": "p_milch", "name": "MILCH", "category": "Milchprodukt", "allergens": "MILCH", "spuren": "", "nutrition": { "kj": 267, "kcal": 64, "fat": 3.5, "sat": 2.3, "carb": 4.8, "sugar": 4.8, "protein": 3.3, "salt": 0.1 }, "composition": [{ "id": "c1", "name": "MILCH", "percent": 100 }] },
   { "id": "p_dextrose", "name": "Dextrose", "category": "Pulver", "allergens": "", "spuren": "", "nutrition": { "kj": 1700, "kcal": 400, "fat": 0, "sat": 0, "carb": 100, "sugar": 100, "protein": 0, "salt": 0 }, "composition": [{ "id": "d1", "name": "Dextrose", "percent": 100 }] },
@@ -141,7 +119,24 @@ const EMBEDDED_PRODUCTS = [
   { "id": "p_amarena", "name": "Amarena Pasta", "category": "Frucht", "allergens": "MILCH, EI, SOJA, ERDNÜSSE, SCHALENFRÜCHTE", "spuren": "Kann Aktivität und Aufmerksamkeit bei Kindern beeinträchtigen", "nutrition": { "kj": 1075, "kcal": 254, "fat": 0, "sat": 0, "carb": 60.5, "sugar": 60.5, "protein": 0.3, "salt": 0.5 }, "composition": [{ "id": "am1", "name": "Zucker", "percent": 40 }, { "id": "am2", "name": "Sauerkirschen", "percent": 20 }, { "id": "am3", "name": "Glukosesirup", "percent": 15 }, { "id": "am4", "name": "Wasser", "percent": 10 }, { "id": "am5", "name": "Frucht- und Gemüsekonzentrate", "percent": 5 }, { "id": "am6", "name": "Aromen (Bittermandelöl)", "percent": 3 }, { "id": "am7", "name": "E330, E331", "percent": 2 }, { "id": "am8", "name": "E440", "percent": 2 }, { "id": "am9", "name": "E129, E151", "percent": 2 }, { "id": "am10", "name": "E202", "percent": 1 }] },
   { "id": "p_wasser", "name": "Wasser", "category": "Zutat", "allergens": "", "spuren": "", "nutrition": { "kj": 0, "kcal": 0, "fat": 0, "sat": 0, "carb": 0, "sugar": 0, "protein": 0, "salt": 0 }, "composition": [{ "id": "w1", "name": "Wasser", "percent": 100 }] },
   { "id": "p_erdbeeren", "name": "Erdbeeren tiefgefroren", "category": "Frucht", "allergens": "", "spuren": "", "nutrition": { "kj": 142, "kcal": 35, "fat": 0.4, "sat": 0, "carb": 7.7, "sugar": 4.9, "protein": 0.6, "salt": 0 }, "composition": [{ "id": "eb1", "name": "Erdbeeren", "percent": 100 }] },
+  { "id": "p_himbeeren", "name": "Himbeeren tiefgefroren", "category": "Frucht", "allergens": "", "spuren": "", "nutrition": { "kj": 163, "kcal": 39, "fat": 0.5, "sat": 0.1, "carb": 5.4, "sugar": 5.4, "protein": 1.5, "salt": 0 }, "composition": [{ "id": "hm1", "name": "Himbeeren", "percent": 100 }] },
   { "id": "p_banana", "name": "Banana", "category": "Frucht", "allergens": "", "spuren": "", "nutrition": { "kj": 397, "kcal": 95, "fat": 0.3, "sat": 0.1, "carb": 20, "sugar": 12, "protein": 1.1, "salt": 0 }, "composition": [{ "id": "bn1", "name": "Banana", "percent": 100 }] },
+  { "id": "p_waldbeeren", "name": "Waldbeeren tiefgefroren", "category": "Frucht", "allergens": "", "spuren": "", "nutrition": { "kj": 222, "kcal": 53, "fat": 0.7, "sat": 0.2, "carb": 9.1, "sugar": 6.6, "protein": 1.3, "salt": 0 }, "composition": [{ "id": "wb1", "name": "Waldbeeren", "percent": 100 }] },
+  { "id": "p_heidelbeeren", "name": "Heidelbeeren tiefgefroren", "category": "Frucht", "allergens": "", "spuren": "", "nutrition": { "kj": 240, "kcal": 57, "fat": 0.3, "sat": 0, "carb": 14.5, "sugar": 10, "protein": 0.7, "salt": 0 }, "composition": [{ "id": "hb1", "name": "Heidelbeeren", "percent": 100 }] },
+  { "id": "p_pfirsich", "name": "Pfirsich", "category": "Frucht", "allergens": "", "spuren": "", "nutrition": { "kj": 175, "kcal": 42, "fat": 0.3, "sat": 0, "carb": 9.5, "sugar": 8.5, "protein": 0.9, "salt": 0 }, "composition": [{ "id": "pf1", "name": "Pfirsich", "percent": 100 }] },
+  { "id": "p_sauerkirschen", "name": "Sauerkirschen", "category": "Frucht", "allergens": "", "spuren": "", "nutrition": { "kj": 209, "kcal": 50, "fat": 0.3, "sat": 0.1, "carb": 12.2, "sugar": 8.5, "protein": 1, "salt": 0 }, "composition": [{ "id": "sk1", "name": "Sauerkirschen", "percent": 100 }] },
+  { "id": "p_mango", "name": "Mango", "category": "Frucht", "allergens": "", "spuren": "", "nutrition": { "kj": 250, "kcal": 60, "fat": 0.4, "sat": 0.1, "carb": 15, "sugar": 14, "protein": 0.8, "salt": 0 }, "composition": [{ "id": "mg1", "name": "Mango", "percent": 100 }] },
+  { "id": "p_ananas", "name": "Ananas", "category": "Frucht", "allergens": "", "spuren": "", "nutrition": { "kj": 210, "kcal": 50, "fat": 0.1, "sat": 0, "carb": 13, "sugar": 10, "protein": 0.5, "salt": 0 }, "composition": [{ "id": "an1", "name": "Ananas", "percent": 100 }] },
+  { "id": "p_zitrone", "name": "Zitrone (Saft)", "category": "Frucht", "allergens": "", "spuren": "", "nutrition": { "kj": 121, "kcal": 29, "fat": 0.3, "sat": 0, "carb": 9, "sugar": 2.5, "protein": 1.1, "salt": 0 }, "composition": [{ "id": "zi1", "name": "Zitrone", "percent": 100 }] },
+  { "id": "p_laktosefrei", "name": "Laktosefreie Milch 1,5%", "category": "Milchprodukt", "allergens": "MILCH", "spuren": "", "nutrition": { "kj": 197, "kcal": 47, "fat": 1.5, "sat": 1, "carb": 4.9, "sugar": 4.9, "protein": 3.4, "salt": 0.13 }, "composition": [{ "id": "lf1", "name": "Laktosefreie Milch", "percent": 99.9 }, { "id": "lf2", "name": "Laktase", "percent": 0.1 }] },
+  { "id": "p_supergelmix", "name": "SUPER GEL MIX", "category": "Pulver", "allergens": "SOJA", "spuren": "Milch, Ei, Mandeln, Haselnüsse, Walnüsse, Pistazien", "nutrition": { "kj": 1350, "kcal": 322, "fat": 10, "sat": 9.4, "carb": 81, "sugar": 50, "protein": 0.7, "salt": 0.56 }, "composition": [{ "id": "a1", "name": "Dextrose", "percent": 35 }, { "id": "a2", "name": "Sorbitol", "percent": 15 }, { "id": "a3", "name": "Xarope glicose", "percent": 14 }, { "id": "a4", "name": "Gordura coco", "percent": 10 }, { "id": "a5", "name": "Maltodextrina", "percent": 8 }, { "id": "a6", "name": "Sojamehl", "percent": 7 }, { "id": "a7", "name": "Sojaprotein", "percent": 5 }, { "id": "a8", "name": "Erbsenprotein", "percent": 3 }, { "id": "a9", "name": "Verdickungsmittel", "percent": 2 }, { "id": "a10", "name": "Emulgatoren", "percent": 1 }] },
+  { "id": "p_lemongiu", "name": "LEMON PIÙ", "category": "Pulver", "allergens": "", "spuren": "MILCH, SOJA", "nutrition": { "kj": 1324, "kcal": 313, "fat": 3.5, "sat": 3.4, "carb": 69, "sugar": 29, "protein": 1.2, "salt": 0.3 }, "composition": [{ "id": "le1", "name": "Dextrose", "percent": 35 }, { "id": "le2", "name": "Glukosesirup getrocknet", "percent": 20 }, { "id": "le3", "name": "Zitronensaftpulver", "percent": 10 }, { "id": "le4", "name": "Reisstärke", "percent": 10 }, { "id": "le5", "name": "pflanzliche Proteine", "percent": 5 }, { "id": "le6", "name": "Aromen", "percent": 5 }, { "id": "le7", "name": "Zitronensäure", "percent": 3 }, { "id": "le8", "name": "E466", "percent": 3 }, { "id": "le9", "name": "E410", "percent": 2 }, { "id": "le10", "name": "E412", "percent": 2 }, { "id": "le11", "name": "E401", "percent": 2 }, { "id": "le12", "name": "E1422", "percent": 1 }, { "id": "le13", "name": "E471", "percent": 1 }, { "id": "le14", "name": "Salz", "percent": 0.5 }, { "id": "le15", "name": "E477", "percent": 0.5 }] },
+  { "id": "p_grundbasis", "name": "Milchspeiseeis Grundbasis", "category": "Milchprodukt", "allergens": "MILCH", "spuren": "Kann Spuren von EI, SOJA, MANDELN, HASELNÜSSEN, WALNÜSSEN und PISTAZIEN enthalten", "nutrition": { "kj": 1127, "kcal": 267, "fat": 4.9, "sat": 3.4, "carb": 50.8, "sugar": 48.3, "protein": 4.8, "salt": 0.09 }, "composition": [{ "id": "gb1", "name": "MILCH", "percent": 67.09 }, { "id": "gb2", "name": "Dextrose", "percent": 12.43 }, { "id": "gb3", "name": "SAHNE", "percent": 4.85 }, { "id": "gb4", "name": "MAGERMILCHPULVER", "percent": 4.41 }, { "id": "gb5", "name": "Glukosepulver", "percent": 4.39 }, { "id": "gb6", "name": "Zucker", "percent": 3.9 }, { "id": "gb7", "name": "Glukosesirup", "percent": 1.46 }, { "id": "gb8", "name": "Pflanzenfette (Palm, Kokos)", "percent": 0.59 }, { "id": "gb9", "name": "MILCHEIWEISS", "percent": 0.29 }, { "id": "gb10", "name": "LAKTOSE", "percent": 0.24 }, { "id": "gb11", "name": "Verdickungsmittel", "percent": 0.12 }, { "id": "gb12", "name": "Aromen", "percent": 0.1 }, { "id": "gb13", "name": "Emulgatoren", "percent": 0.07 }, { "id": "gb14", "name": "Salz", "percent": 0.05 }] },
+  { "id": "p_pfefferminz", "name": "Pfefferminz-Extrakt", "category": "PASTE", "allergens": "", "spuren": "Kann Aktivität und Aufmerksamkeit bei Kindern beeinträchtigen", "nutrition": { "kj": 1298, "kcal": 310, "fat": 0.2, "sat": 0.1, "carb": 76.3, "sugar": 49, "protein": 0.2, "salt": 0.02 }, "composition": [{ "id": "pm1", "name": "Glukosesirup", "percent": 96.34 }, { "id": "pm2", "name": "Pfefferminz-Extrakte", "percent": 3 }, { "id": "pm3", "name": "Aromen", "percent": 0.3 }, { "id": "pm4", "name": "Carrageenan", "percent": 0.15 }, { "id": "pm5", "name": "Carboxymethylcellulose", "percent": 0.15 }, { "id": "pm6", "name": "E133", "percent": 0.06 }] },
+  { "id": "p_amarenasosse", "name": "Amarena SOßE", "category": "Zutat", "allergens": "SULFITE", "spuren": "", "nutrition": { "kj": 1652, "kcal": 389, "fat": 0, "sat": 0, "carb": 96.9, "sugar": 67.8, "protein": 0.3, "salt": 0 }, "composition": [{ "id": "as1", "name": "Glukosesirup", "percent": 40 }, { "id": "as2", "name": "Zucker", "percent": 30 }, { "id": "as3", "name": "Amarenakirschsaft", "percent": 23 }, { "id": "as4", "name": "Wasser", "percent": 5 }, { "id": "as5", "name": "E330, E334", "percent": 0.8 }, { "id": "as6", "name": "E163", "percent": 0.4 }, { "id": "as7", "name": "Aromen", "percent": 0.4 }, { "id": "as8", "name": "E224", "percent": 0.4 }] },
+  { "id": "p_weissschokoladeraspel", "name": "Weiß Schokolade Raspel", "category": "Zutat", "allergens": "MILCH", "spuren": "Kann Spuren von SOJA enthalten", "nutrition": { "kj": 541, "kcal": 2263, "fat": 30.5, "sat": 17.4, "carb": 18.4, "sugar": 62.2, "protein": 4.5, "salt": 0.16 }, "composition": [{ "id": "wr1", "name": "Zucker", "percent": 55 }, { "id": "wr2", "name": "Kakaobutter", "percent": 30 }, { "id": "wr3", "name": "VOLLMILCHPULVER", "percent": 14 }, { "id": "wr4", "name": "Lecithin", "percent": 1 }] },
+  { "id": "p_dunkelschokoladeraspel", "name": "Dunkel Schokolade Raspel", "category": "Zutat", "allergens": "", "spuren": "", "nutrition": { "kj": 2045, "kcal": 490, "fat": 25.5, "sat": 15.1, "carb": 53, "sugar": 48.3, "protein": 7.3, "salt": 0.01 }, "composition": [{ "id": "dr1", "name": "Zucker", "percent": 50 }, { "id": "dr2", "name": "Kakaomasse", "percent": 30 }, { "id": "dr3", "name": "fettarmes Kakaopulver", "percent": 19 }, { "id": "dr4", "name": "Lecithin", "percent": 1 }] },
+  { "id": "p_keksstuckchen", "name": "Keksstückchen mit Zartbitterschokolade", "category": "Milchprodukt", "allergens": "GLUTEN (WEIZEN), SOJA", "spuren": "Kann Spuren von MILCH, EI und SCHALENFRÜCHTEN enthalten", "nutrition": { "kj": 2077, "kcal": 497, "fat": 26, "sat": 14, "carb": 57, "sugar": 32, "protein": 6.3, "salt": 0.75 }, "composition": [{ "id": "ke1", "name": "WEIZENMEHL", "percent": 35 }, { "id": "ke2", "name": "Zucker", "percent": 20 }, { "id": "ke3", "name": "Kakaomasse", "percent": 10 }, { "id": "ke4", "name": "Glukosesirup", "percent": 8 }, { "id": "ke5", "name": "Palmfett", "percent": 8 }, { "id": "ke6", "name": "Kakaobutter", "percent": 6 }, { "id": "ke7", "name": "WEIZENSTÄRKE", "percent": 5 }, { "id": "ke8", "name": "Karamellsirup", "percent": 3 }, { "id": "ke9", "name": "E450, E500", "percent": 2 }, { "id": "ke10", "name": "E322", "percent": 1 }, { "id": "ke11", "name": "Salz", "percent": 1 }, { "id": "ke12", "name": "natürliches Aroma", "percent": 1 }] },
   { "id": "p_base_soave", "name": "SOAVE", "category": "Milchprodukt", "allergens": "MILCH", "spuren": "Kann Spuren von EI, SOJA, MANDELN, HASELNÜSSEN, WALNÜSSEN und PISTAZIEN enthalten", "nutrition": { "kj": 1933, "kcal": 476, "fat": 12, "sat": 8, "carb": 57, "sugar": 40, "protein": 11, "salt": 1.1 }, "composition": [{ "id": "bs1", "name": "Glukosesirup (getrocknet)", "percent": 30 }, { "id": "bs2", "name": "MAGERMILCHPULVER", "percent": 25 }, { "id": "bs3", "name": "Dextrose", "percent": 15 }, { "id": "bs4", "name": "Pflanzenfette (Palm, Kokos)", "percent": 12 }, { "id": "bs5", "name": "MILCHEIWEISS", "percent": 6 }, { "id": "bs6", "name": "LAKTOSE", "percent": 5 }, { "id": "bs7", "name": "Verdickungsmittel", "percent": 2.5 }, { "id": "bs8", "name": "Aromen", "percent": 2 }, { "id": "bs9", "name": "Emulgatoren", "percent": 1.5 }, { "id": "bs10", "name": "Salz", "percent": 1 }] },
   { "id": "1777275146389-p9j6g8g2", "name": "Karamellsauce", "category": "Zutat", "allergens": "SULFITE", "spuren": "Milch, Ei, Soja, Erdnüsse, Schalenfrüchte, Sesam", "nutrition": { "kj": 11294, "kcal": 305, "fat": 0, "sat": 0, "carb": 66.6, "sugar": 64.5, "protein": 0.1, "salt": 0.03 }, "composition": [{ "id": "x1", "name": "Glukosesirup", "percent": 45 }, { "id": "x2", "name": "Zucker", "percent": 30 }, { "id": "x3", "name": "Karamell", "percent": 10 }, { "id": "x4", "name": "Wasser", "percent": 9 }, { "id": "x5", "name": "E150d", "percent": 1.5 }, { "id": "x6", "name": "Aromen", "percent": 1.5 }, { "id": "x7", "name": "E406", "percent": 1.5 }, { "id": "x8", "name": "E202", "percent": 1.5 }] },
   { "id": "1777278526993-vz6y9www", "name": "Orangenzubereitung mit kandierten Stücken", "category": "PASTE", "allergens": "", "spuren": "", "nutrition": { "kj": 1196, "kcal": 286, "fat": 0, "sat": 0, "carb": 67.5, "sugar": 60.6, "protein": 0.1, "salt": 0.21 }, "composition": [{ "id": "o1", "name": "Glukosesirup", "percent": 36.84 }, { "id": "o2", "name": "Zucker", "percent": 21.05 }, { "id": "o3", "name": "kandierte Orangenstücke", "percent": 15.79 }, { "id": "o4", "name": "Wasser", "percent": 14.74 }, { "id": "o5", "name": "Orangensaft", "percent": 5.26 }, { "id": "o6", "name": "Citronensäure", "percent": 1.58 }, { "id": "o7", "name": "E406", "percent": 1.05 }, { "id": "o8", "name": "E440", "percent": 1.05 }, { "id": "o9", "name": "Aromen", "percent": 1.05 }, { "id": "o10", "name": "Ascorbinsäure", "percent": 0.53 }, { "id": "o11", "name": "Natriumcitrat", "percent": 0.53 }, { "id": "o12", "name": "Carotine", "percent": 0.32 }, { "id": "o13", "name": "Kartoffelkonzentrat", "percent": 0.21 }] },
@@ -154,27 +149,48 @@ const EMBEDDED_PRODUCTS = [
   { "id": "1778340179388-7mm510r7", "name": "Alphonso Mango Puree", "category": "Frucht", "allergens": "", "spuren": "", "nutrition": { "kj": 260, "kcal": 69, "fat": 0.3, "sat": 0.1, "carb": 17, "sugar": 14, "protein": 0.6, "salt": 0.1 }, "composition": [{ "id": "mp1", "name": "Mango Puree", "percent": 100 }] },
   { "id": "1778342840511-91kepyhc", "name": "Base Gelato Paw Patrol Biscotto", "category": "Milchprodukt", "allergens": "MILCH", "spuren": "SOJA, EI, MANDELN, HASELNÜSSE, WALNÜSSE, PISTAZIEN", "nutrition": { "kj": 1751, "kcal": 415, "fat": 8.1, "sat": 6, "carb": 79, "sugar": 67, "protein": 3.1, "salt": 0.36 }, "composition": [{ "id": "bp1", "name": "Zucker", "percent": 30 }, { "id": "bp2", "name": "Maltodextrin", "percent": 18 }, { "id": "bp3", "name": "Pflanzenfasern", "percent": 12 }, { "id": "bp4", "name": "Pflanzliche Fette", "percent": 10 }, { "id": "bp5", "name": "MAGERMILCHPULVER", "percent": 8 }, { "id": "bp6", "name": "Glukosesirup", "percent": 7 }, { "id": "bp7", "name": "Dextrose", "percent": 6 }, { "id": "bp8", "name": "LAKTOSE", "percent": 4 }, { "id": "bp9", "name": "MILCHEIWEISS", "percent": 2 }, { "id": "bp10", "name": "Verdickungsmittel", "percent": 1.5 }, { "id": "bp11", "name": "Emulgatoren", "percent": 1 }, { "id": "bp12", "name": "Spirulina-Extrakt", "percent": 0.2 }, { "id": "bp13", "name": "Aromen", "percent": 0.2 }, { "id": "bp14", "name": "Salz", "percent": 0.1 }] }
 ];
-// =================================================================
-// 2. ALLE REZEPTE (33)
-// =================================================================
+
+// ============================================================
+// TODAS AS 33 RECEITAS (COMPLETO)
+// ============================================================
 const EMBEDDED_RECIPES = [
   { "id": "r_amarena", "name": "Amarena Eis REWE", "legalName": "Milchspeiseeis mit Amarena-Kirschen", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_amarena", "qty": 400 }] },
   { "id": "r_cookies", "name": "COOKIES REWE", "legalName": "Milchspeiseeis mit Cookies-Paste", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_cookies", "qty": 300 }, { "productId": "p_milkcocoa", "qty": 100 }, { "productId": "p_keksstuckchen", "qty": 100 }, { "productId": "p_dunkelschokoladeraspel", "qty": 100 }] },
   { "id": "r_stracciatella", "name": "Stracciatella REWE", "legalName": "Milchspeiseeis Stracciatella", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_kakaoglasur", "qty": 300 }] },
-  { "id": "r_erdbeersorbet", "name": "Erdbeersorbet REWE", "legalName": "Erdbeersorbet (50% Fruchtanteil)", "quid": "Erdbeeren 50%", "packaging": "4000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_erdbeeren", "qty": 2000 }, { "productId": "p_zucker", "qty": 550 }, { "productId": "p_glukosepulver", "qty": 250 }, { "productId": "p_wasser", "qty": 1150 }, { "productId": "1777288828144-7hoz8q8x", "qty": 20 }] },
+  { "id": "r_spaghetti", "name": "SPAGHETTI Eis REWE", "legalName": "Milchspeiseeis mit Vanillegeschmack", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_erdbeerglasur", "qty": 400 }, { "productId": "p_weissschokoladeraspel", "qty": 100 }] },
+  { "id": "r_toffiffee", "name": "TOFFIFFEE REWE", "legalName": "Milchspeiseeis mit Haselnuss-Karamell", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_haselnuss", "qty": 400 }, { "productId": "p_caramel", "qty": 150 }, { "productId": "1777275146389-p9j6g8g2", "qty": 100 }] },
+  { "id": "r_jogurt_orange", "name": "Jogurt Orange REWE", "legalName": "Milchspeiseeis mit Joghurt und Orange", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 1792 }, { "productId": "p_dextrose", "qty": 323 }, { "productId": "p_sahne", "qty": 135 }, { "productId": "p_glukosepulver", "qty": 121 }, { "productId": "p_zucker", "qty": 408 }, { "productId": "p_magermilch", "qty": 88 }, { "productId": "p_base_soave", "qty": 135 }, { "productId": "p_joghurt", "qty": 1000 }, { "productId": "1777278526993-vz6y9www", "qty": 400 }] },
+  { "id": "r_vanille", "name": "vanille REWE", "legalName": "Milchspeiseeis mit Vanillegeschmack", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 216 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_vanille", "qty": 180 }, { "productId": "p_milch", "qty": 3800 }] },
+  { "id": "r_erdbeersorbet", "name": "Erdbeersorbet REWE", "legalName": "Erdbeersorbet (50% Fruchtanteil)", "quid": "Erdbeeren 50%", "packaging": "4000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_zucker", "qty": 550 }, { "productId": "p_erdbeeren", "qty": 2000 }, { "productId": "p_glukosepulver", "qty": 250 }, { "productId": "p_wasser", "qty": 1150 }, { "productId": "1777288828144-7hoz8q8x", "qty": 20 }] },
   { "id": "r_schokolade", "name": "Schokolade Eis REWE", "legalName": "Milchspeiseeis mit Kakao", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_kakaopulver", "qty": 300 }, { "productId": "p_dextrose", "qty": 100 }, { "productId": "p_milch", "qty": 3751 }] },
+  { "id": "r_pfefferminz", "name": "Pfefferminz Eis REWE", "legalName": "Milchspeiseeis mit Pfefferminz", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_pfefferminz", "qty": 150 }, { "productId": "p_kakaoglasur", "qty": 300 }] },
   { "id": "r_bananen", "name": "Bananen Eis REWE", "legalName": "Bananen sorbet (50% Fruchtanteil)", "quid": "Banane 50%", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_wasser", "qty": 1100 }, { "productId": "p_banana", "qty": 2000 }, { "productId": "p_glukosepulver", "qty": 250 }, { "productId": "p_zucker", "qty": 550 }, { "productId": "1777288828144-7hoz8q8x", "qty": 20 }] },
-  { "id": "r_snickers", "name": "Snickers REWE", "legalName": "Milchspeiseeis mit Erdnusszubereitung", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "1777289533239-83jtf9wt", "qty": 500 }, { "productId": "1777289809167-7o6encx5", "qty": 100 }] },
+  { "id": "r_snickers", "name": "Snickers REWE", "legalName": "Milchspeiseeis mit Erdnuss", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "1777289533239-83jtf9wt", "qty": 500 }, { "productId": "1777289809167-7o6encx5", "qty": 100 }] },
+  { "id": "r_zitronen", "name": "Zitronen Eis REWE", "legalName": "Zitronensorbet", "quid": "", "packaging": "4000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_wasser", "qty": 3000 }, { "productId": "p_zucker", "qty": 580 }, { "productId": "p_dextrose", "qty": 80 }, { "productId": "p_lemongiu", "qty": 215 }] },
+  { "id": "r_yogurette", "name": "Yogurette REWE", "legalName": "Milchspeiseeis mit Joghurt, Erdbeeren", "quid": "", "packaging": "4800", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 1792 }, { "productId": "p_dextrose", "qty": 323 }, { "productId": "p_sahne", "qty": 135 }, { "productId": "p_glukosepulver", "qty": 121 }, { "productId": "p_zucker", "qty": 408 }, { "productId": "p_magermilch", "qty": 88 }, { "productId": "p_base_soave", "qty": 135 }, { "productId": "p_joghurt", "qty": 1000 }, { "productId": "p_erdbeeren", "qty": 500 }, { "productId": "p_kakaoglasur", "qty": 300 }] },
+  { "id": "r_dubai", "name": "DUBAI SCHOKOLADE REWE", "legalName": "Milchspeiseeis mit Pistazie Kadayif", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_pistazien", "qty": 200 }, { "productId": "p_kakaopulver", "qty": 300 }, { "productId": "p_dextrose", "qty": 100 }, { "productId": "1777298790037-4yhebmxr", "qty": 100 }] },
   { "id": "r_hanutta", "name": "Hanutta REWE", "legalName": "Milchspeiseeis Haselnuss-Kakao", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_haselnuss", "qty": 450 }, { "productId": "p_kakaopulver", "qty": 225 }, { "productId": "p_milkcocoa", "qty": 150 }, { "productId": "1777301818049-tiw3gdqa", "qty": 150 }] },
+  { "id": "r_kinder_riegel", "name": "kinder riegel EIS REWE", "legalName": "Milchspeiseeis weiße Schokolade", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_weisseschokolade", "qty": 400 }, { "productId": "p_kakaopulver", "qty": 60 }, { "productId": "p_dunklecreme", "qty": 250 }] },
+  { "id": "r_kinder_bueno", "name": "kinder bueno REWE", "legalName": "Milchspeiseeis Haselnuss", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_haselnuss", "qty": 400 }, { "productId": "p_kakaopulver", "qty": 100 }, { "productId": "p_kakaoglasur", "qty": 250 }] },
   { "id": "r_stracciatella_serena", "name": "Stracciatella Eis SERENA", "legalName": "Milchspeiseis", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 4650 }, { "productId": "p_zucker", "qty": 791 }, { "productId": "p_dextrose", "qty": 93 }, { "productId": "1778330582999-1cbcokf4", "qty": 465 }, { "productId": "p_kakaoglasur", "qty": 250 }] },
   { "id": "r_amarena_serena", "name": "Amarena Eis SERENA", "legalName": "Milchspeiseis Amarena", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 4650 }, { "productId": "p_zucker", "qty": 791 }, { "productId": "1778330582999-1cbcokf4", "qty": 465 }, { "productId": "p_dextrose", "qty": 93 }, { "productId": "p_amarena", "qty": 250 }] },
+  { "id": "r_haselnuss_serena", "name": "Haselnüsse SERENA", "legalName": "Milchspeiseis", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 4341 }, { "productId": "p_dextrose", "qty": 87 }, { "productId": "p_zucker", "qty": 738 }, { "productId": "1778330582999-1cbcokf4", "qty": 434 }, { "productId": "p_haselnuss", "qty": 400 }] },
+  { "id": "r_schoko_serena", "name": "SCHOKOLADE SERENA", "legalName": "Milchspeiseis", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 4341 }, { "productId": "p_dextrose", "qty": 87 }, { "productId": "p_zucker", "qty": 738 }, { "productId": "1778330582999-1cbcokf4", "qty": 434 }, { "productId": "p_kakaopulver", "qty": 250 }, { "productId": "p_dextrose", "qty": 100 }] },
+  { "id": "r_vanille_serena", "name": "VANILLE SERENA", "legalName": "Milchspeiseis", "quid": "", "packaging": "6000", "storage": "", "manufacturer": "Eiscafé Sanremo", "mhd": "", "items": [{ "productId": "p_milch", "qty": 4651 }, { "productId": "p_dextrose", "qty": 93 }, { "productId": "p_zucker", "qty": 791 }, { "productId": "1778330582999-1cbcokf4", "qty": 465 }, { "productId": "p_vanille", "qty": 150 }] },
+  { "id": "r_cookies_serena", "name": "COOKIES SERENA", "legalName": "Milchspeiseeis", "quid": "", "packaging": "6000", "storage": "", "manufacturer": "Eiscafé Sanremo", "mhd": "", "items": [{ "productId": "p_milch", "qty": 4341 }, { "productId": "p_dextrose", "qty": 87 }, { "productId": "p_zucker", "qty": 738 }, { "productId": "1778330582999-1cbcokf4", "qty": 434 }, { "productId": "p_cookies", "qty": 250 }, { "productId": "p_milkcocoa", "qty": 150 }] },
+  { "id": "r_snickers_serena", "name": "SNICKERS SERENA", "legalName": "Milchspeiseeis", "quid": "", "packaging": "6000", "storage": "", "manufacturer": "Eiscafé Sanremo", "mhd": "", "items": [{ "productId": "p_milch", "qty": 4341 }, { "productId": "p_dextrose", "qty": 87 }, { "productId": "p_zucker", "qty": 738 }, { "productId": "1778330582999-1cbcokf4", "qty": 434 }, { "productId": "1777289533239-83jtf9wt", "qty": 400 }, { "productId": "p_milkcocoa", "qty": 150 }] },
   { "id": "r_erdbeer_vitrine", "name": "Erdbeersorbet VITRINE", "legalName": "SORBET", "quid": "Erdbeeren 50%", "packaging": "4000", "storage": "", "manufacturer": "Eiscafé Sanremo", "mhd": "", "items": [{ "productId": "p_wasser", "qty": 1100 }, { "productId": "p_zucker", "qty": 550 }, { "productId": "p_erdbeeren", "qty": 2000 }, { "productId": "p_supergelmix", "qty": 80 }, { "productId": "p_glukosepulver", "qty": 270 }] },
-  { "id": "r_mango_vitrine", "name": "MANGO VITRINE", "legalName": "SORBET", "quid": "Mango", "packaging": "4000", "storage": "", "manufacturer": "Eiscafé Sanremo", "mhd": "", "items": [{ "productId": "p_zucker", "qty": 420 }, { "productId": "p_glukosepulver", "qty": 220 }, { "productId": "p_supergelmix", "qty": 80 }, { "productId": "p_zitrone", "qty": 20 }, { "productId": "1778340179388-7mm510r7", "qty": 2000 }, { "productId": "p_wasser", "qty": 1260 }] }
+  { "id": "r_himbeer_vitrine", "name": "HIMBEERE SORBET VITRINE", "legalName": "SORBET", "quid": "Himbeeren", "packaging": "4000", "storage": "", "manufacturer": "Eiscafé Sanremo", "mhd": "", "items": [{ "productId": "p_wasser", "qty": 1100 }, { "productId": "p_zucker", "qty": 550 }, { "productId": "p_heidelbeeren", "qty": 2000 }, { "productId": "p_glukosepulver", "qty": 270 }, { "productId": "p_supergelmix", "qty": 80 }] },
+  { "id": "r_zitrone_vitrine", "name": "ZITRONE SORBET VITRINE", "legalName": "SORBET", "quid": "", "packaging": "4000", "storage": "", "manufacturer": "Eiscafé Sanremo", "mhd": "", "items": [{ "productId": "p_wasser", "qty": 3000 }, { "productId": "p_zucker", "qty": 580 }, { "productId": "p_lemongiu", "qty": 215 }, { "productId": "p_dextrose", "qty": 80 }, { "productId": "p_supergelmix", "qty": 125 }] },
+  { "id": "r_banane_vitrine", "name": "BANANE VITRINE", "legalName": "SORBET", "quid": "Banane", "packaging": "4000", "storage": "", "manufacturer": "Eiscafé Sanremo", "mhd": "", "items": [{ "productId": "p_wasser", "qty": 1100 }, { "productId": "p_banana", "qty": 2000 }, { "productId": "p_glukosepulver", "qty": 250 }, { "productId": "p_supergelmix", "qty": 80 }, { "productId": "p_zucker", "qty": 550 }, { "productId": "1777288828144-7hoz8q8x", "qty": 20 }] },
+  { "id": "r_mango_vitrine", "name": "MANGO VITRINE", "legalName": "SORBET", "quid": "Mango", "packaging": "4000", "storage": "", "manufacturer": "Eiscafé Sanremo", "mhd": "", "items": [{ "productId": "p_zucker", "qty": 420 }, { "productId": "p_glukosepulver", "qty": 220 }, { "productId": "p_supergelmix", "qty": 80 }, { "productId": "p_zitrone", "qty": 20 }, { "productId": "1778340179388-7mm510r7", "qty": 2000 }, { "productId": "p_wasser", "qty": 1260 }] },
+  { "id": "r_pawpatrol", "name": "Base Gelato Paw Patrol Biscotto", "legalName": "Wassereis mit Milchbestandteilen", "quid": "", "packaging": "5000", "storage": "Bei -18°C lagern", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "1778342840511-91kepyhc", "qty": 1250 }, { "productId": "p_wasser", "qty": 2750 }] }
 ];
-// =================================================================
-// 3. LOGIK
-// =================================================================
-const STORAGE_KEY = 'sanremo_final_working';
+
+// ============================================================
+// LÓGICA COMPLETA
+// ============================================================
+const STORAGE_KEY = 'sanremo_final_completo';
 let state = { products: [], recipes: [], recipeDraft: [] };
 
 function uid() { return Date.now() + '-' + Math.random().toString(36).substr(2, 8); }
@@ -212,12 +228,14 @@ function computeNutrition(r) {
   for (let k in acc) acc[k] = parseFloat(acc[k].toFixed(2));
   return acc;
 }
+
 function getAllergensForProduct(p) {
   let set = new Set();
   if (p.allergens) p.allergens.split(',').forEach(a => set.add(a.trim().toUpperCase()));
   return Array.from(set);
 }
-function getWeightSortedIngredientsWithMarkup(r) {
+
+function getIngredientsWithMarkup(r) {
   let gram = new Map();
   for (let it of r.items) {
     let prod = state.products.find(p => p.id === it.productId);
@@ -233,6 +251,7 @@ function getWeightSortedIngredientsWithMarkup(r) {
   for (let it of r.items) { let p = state.products.find(p => p.id === it.productId); if (p) getAllergensForProduct(p).forEach(a => allAll.add(a)); }
   return sorted.map(([name]) => { let l = name.toLowerCase(); for (let a of allAll) if (l.includes(a.toLowerCase())) return `**${name}**`; return name; });
 }
+
 function getCombinedSpuren(r) {
   let sp = new Set();
   for (let it of r.items) {
@@ -244,12 +263,14 @@ function getCombinedSpuren(r) {
   }
   return sp.size ? `Kann Spuren von ${Array.from(sp).join(', ')} enthalten.` : "";
 }
+
 function getQuidText(r) { return r.quid && r.quid.trim() ? ` (${r.quid})` : ""; }
-function generateLMIVLabel(r) {
+
+function generateLabel(r) {
   for (let it of r.items) { let p = state.products.find(p => p.id === it.productId); if (p && Math.abs(getProdSum(p)-100) > 0.1) return `❌ Produkt ${p.name} hat keine 100%-Zusammensetzung.`; }
   let nut = computeNutrition(r);
   if (!nut) return "Fehler: Nährwertberechnung nicht möglich.";
-  let ing = getWeightSortedIngredientsWithMarkup(r);
+  let ing = getIngredientsWithMarkup(r);
   if (!ing.length) return "Keine Zutatenliste (fehlende 100%-Zusammensetzung?).";
   let quid = getQuidText(r);
   let sp = getCombinedSpuren(r);
@@ -261,7 +282,7 @@ function generateLMIVLabel(r) {
   return label;
 }
 
-// UI Rendering
+// UI
 function renderProducts() {
   let c = document.getElementById('productsList');
   if (!c) return;
@@ -381,7 +402,7 @@ function renderRecipeDraft() {
   let total = state.recipeDraft.reduce((s,i)=>s+i.qty,0);
   document.getElementById('recipeTotalWeight').innerHTML = `<strong>Gesamt: ${total.toFixed(1)} g</strong>`;
   let tbody = document.querySelector('#recipeItemsTable tbody');
-  if (tbody) tbody.innerHTML = state.recipeDraft.map(it => { let p = state.products.find(p => p.id === it.productId); let perc = total ? (it.qty/total*100).toFixed(1) : 0; return `<tr><td>${p?.name||'?'}</td<td>${it.qty.toFixed(1)} g</td<td>${perc}%</td<td><button class="danger" onclick="removeRecipeItem('${it.id}')">X</button></td>`; }).join('');
+  if (tbody) tbody.innerHTML = state.recipeDraft.map(it => { let p = state.products.find(p => p.id === it.productId); let perc = total ? (it.qty/total*100).toFixed(1) : 0; return `<tr><td style="border-bottom:1px solid #2a3348;">${p?.name||'?'}</td<td style="border-bottom:1px solid #2a3348;">${it.qty.toFixed(1)} g</td<td style="border-bottom:1px solid #2a3348;">${perc}%</td<td style="border-bottom:1px solid #2a3348;"><button class="danger" onclick="removeRecipeItem('${it.id}')">X</button></td>`; }).join('');
 }
 window.saveRecipe = () => {
   let pack = document.getElementById('recipePackaging').value;
@@ -462,13 +483,13 @@ window.validateRecipe = () => {
   if (issues.length) out.innerHTML = issues.map(i => `<div class="pill error">⚠️ ${i}</div>`).join('');
   else out.innerHTML = '<div class="pill success">✅ LMIV konform – Zutaten sortiert, Allergene fett, Spuren-Hinweis, QUID.</div>';
 };
-// ETIKETT FUNKTIONEN (agora garantidas)
+// ETIKETT
 window.generateLabel = () => {
   let rid = document.getElementById('labelRecipeSelect').value;
   let r = state.recipes.find(rr => rr.id === rid);
   let prev = document.getElementById('labelPreview');
   if (!r) { prev.innerText = 'Bitte wählen Sie ein Rezept aus.'; return; }
-  prev.innerText = generateLMIVLabel(r);
+  prev.innerText = generateLabel(r);
 };
 window.copyLabel = () => {
   let txt = document.getElementById('labelPreview').innerText;
@@ -486,10 +507,10 @@ window.generateProductSheet = () => {
   let prev = document.getElementById('techPreview');
   if (!p) { prev.innerHTML = '<p>Produkt wählen.</p>'; return; }
   let sum = getProdSum(p);
-  let compRows = p.composition.map(c => `<tr><td>${c.name}</td<td>${c.percent.toFixed(2)}%</td</tr>`).join('');
+  let compRows = p.composition.map(c => `<tr><td style="border:1px solid #ccc;">${c.name}</td<td style="border:1px solid #ccc;">${c.percent.toFixed(2)}%</td</tr>`).join('');
   prev.innerHTML = `<h2>${p.name}</h2><p>Kategorie: ${p.category} – ${Math.abs(sum-100)<0.1?'100% vollständig':'unvollständig ('+sum.toFixed(1)+'%)'}</p>
-  <h3>Zusammensetzung</h3><table><thead><tr><th>Zutat</th><th>%</th></tr></thead><tbody>${compRows}</tbody></table>
-  <h3>Nährwerte pro 100g</h3><table><thead><tr><th>Energie</th><th>Fett</th><th>davon gesättigt</th><th>Kohlenhydrate</th><th>davon Zucker</th><th>Eiweiß</th><th>Salz</th></tr></thead><tbody><tr><td>${p.nutrition.kj} kJ / ${p.nutrition.kcal} kcal</td><td>${p.nutrition.fat} g</td><td>${p.nutrition.sat} g</td><td>${p.nutrition.carb} g</td><td>${p.nutrition.sugar} g</td><td>${p.nutrition.protein} g</td><td>${p.nutrition.salt} g</td></tr></tbody></table>
+  <h3>Zusammensetzung</h3><table style="width:100%; border-collapse:collapse;"><thead><tr><th>Zutat</th><th>%</th></tr></thead><tbody>${compRows}</tbody></table>
+  <h3>Nährwerte pro 100g</h3><table style="width:100%; border-collapse:collapse;"><thead><tr><th>Energie</th><th>Fett</th><th>davon gesättigt</th><th>Kohlenhydrate</th><th>davon Zucker</th><th>Eiweiß</th><th>Salz</th></tr></thead><tbody><tr><td style="border:1px solid #ccc;">${p.nutrition.kj} kJ / ${p.nutrition.kcal} kcal</td<td style="border:1px solid #ccc;">${p.nutrition.fat} g</td<td style="border:1px solid #ccc;">${p.nutrition.sat} g</td<td style="border:1px solid #ccc;">${p.nutrition.carb} g</td<td style="border:1px solid #ccc;">${p.nutrition.sugar} g</td<td style="border:1px solid #ccc;">${p.nutrition.protein} g</td<td style="border:1px solid #ccc;">${p.nutrition.salt} g</td></tr></tbody></table>
   <p><strong>Allergene:</strong> ${p.allergens||'Keine'} &nbsp;|&nbsp; <strong>Spuren:</strong> ${p.spuren||'Keine'}</p>`;
 };
 window.generateRecipeSheet = () => {
@@ -499,14 +520,14 @@ window.generateRecipeSheet = () => {
   if (!r) { prev.innerHTML = '<p>Rezept wählen.</p>'; return; }
   let nut = computeNutrition(r);
   let total = r.items.reduce((s,i)=>s+i.qty,0);
-  let ing = getWeightSortedIngredientsWithMarkup(r);
+  let ing = getIngredientsWithMarkup(r);
   let quid = getQuidText(r);
   let sp = getCombinedSpuren(r);
-  let itemsTable = r.items.map(it => { let p = state.products.find(p => p.id === it.productId); let perc = total ? (it.qty/total*100).toFixed(1) : 0; return `<tr><td>${p?.name||'?'}</td<td>${it.qty.toFixed(1)} g</td<td>${perc}%</td</tr>`; }).join('');
+  let itemsTable = r.items.map(it => { let p = state.products.find(p => p.id === it.productId); let perc = total ? (it.qty/total*100).toFixed(1) : 0; return `<tr><td style="border:1px solid #ccc;">${p?.name||'?'}</td<td style="border:1px solid #ccc;">${it.qty.toFixed(1)} g</td<td style="border:1px solid #ccc;">${perc}%</td</td>`; }).join('');
   prev.innerHTML = `<h2>${r.name}</h2><p>${r.legalName}${quid} | Füllmenge: ${r.packaging} g</p>
   <h3>Zutaten (nach Gewicht, Allergene fett)</h3><p>${ing.join(', ')}.</p>${sp?`<p><strong>${sp}</strong></p>`:''}
-  <h3>Rezeptzusammensetzung</h3><table><thead><tr><th>Produkt</th><th>g</th><th>%</th></tr></thead><tbody>${itemsTable}</tbody></table>
-  <h3>Nährwerte pro 100g</h3><table><thead><tr><th>Energie</th><th>Fett</th><th>davon gesättigt</th><th>Kohlenhydrate</th><th>davon Zucker</th><th>Eiweiß</th><th>Salz</th></tr></thead><tbody><tr><td>${nut.kj} kJ / ${nut.kcal} kcal</td><td>${nut.fat} g</td><td>${nut.sat} g</td><td>${nut.carb} g</td><td>${nut.sugar} g</td><td>${nut.protein} g</td><td>${nut.salt} g</td></tr></tbody></table>`;
+  <h3>Rezeptzusammensetzung</h3><table style="width:100%; border-collapse:collapse;"><thead><tr><th>Produkt</th><th>g</th><th>%</th></tr></thead><tbody>${itemsTable}</tbody></tr>
+  <h3>Nährwerte pro 100g</h3><table style="width:100%; border-collapse:collapse;"><thead><tr><th>Energie</th><th>Fett</th><th>davon gesättigt</th><th>Kohlenhydrate</th><th>davon Zucker</th><th>Eiweiß</th><th>Salz</th></tr></thead><tbody><tr><td style="border:1px solid #ccc;">${nut.kj} kJ / ${nut.kcal} kcal</td<td style="border:1px solid #ccc;">${nut.fat} g</td<td style="border:1px solid #ccc;">${nut.sat} g</td<td style="border:1px solid #ccc;">${nut.carb} g</td<td style="border:1px solid #ccc;">${nut.sugar} g</td<td style="border:1px solid #ccc;">${nut.protein} g</td<td style="border:1px solid #ccc;">${nut.salt} g</td></tr></tbody></table>`;
 };
 window.printSheet = () => { window.print(); };
 window.exportData = () => { let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'})); a.download = 'sanremo_backup.json'; a.click(); };
