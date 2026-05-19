@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Sanremo LMIV – Komplett mit „Kann Spuren enthalten“</title>
+  <title>Sanremo LMIV – Komplett & fehlerfrei</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -71,7 +71,7 @@
 </head>
 <body>
 <div class="app-header">
-  <h1>🍦 Sanremo LMIV – Komplett mit „Kann Spuren enthalten“</h1>
+  <h1>🍦 Sanremo LMIV – Komplett & fehlerfrei</h1>
   <p>Zutaten nach Gewicht • Allergene **fett** • Spuren‑Hinweis • Nährwerte pro 100g • QUID • Ihre Daten integriert</p>
 </div>
 <div class="layout">
@@ -91,7 +91,7 @@
       <div class="grid">
         <div class="card col-span-12">
           <h2>📋 Voll konform mit LMIV (EU) 1169/2011</h2>
-          <p>Art. 18(2): Zutaten nach Gewicht sortiert • Art. 21: Allergene in der Zutatenliste hervorgehoben (fett) • Zusätzlich optionaler Hinweis „Kann Spuren von … enthalten“ (Rückverfolgbarkeit) • Nährwertdeklaration pro 100g • QUID möglich.</p>
+          <p>Art. 18(2): Zutaten nach Gewicht sortiert • Art. 21: Allergene in der Zutatenliste hervorgehoben (fett) • Zusätzlich optionaler Hinweis „Kann Spuren von … enthalten“ • Nährwertdeklaration pro 100g • QUID möglich.</p>
           <div class="two-col" style="margin-top:1rem">
             <div><span class="pill success">✓ Sortierung nach Gewicht</span> <span class="pill success">✓ Allergene **fett**</span></div>
             <div><span class="pill success">✓ Nährwerte pro 100g</span> <span class="pill success">✓ Spuren-Hinweis</span></div>
@@ -99,7 +99,7 @@
         </div>
         <div class="card col-span-4"><h3>📊 Statistik</h3><div id="statsArea"></div></div>
         <div class="card col-span-4"><h3>📌 Arbeitsablauf</h3><ol style="margin-left:1.2rem"><li>Produkte (mit Allergenen + Spuren)</li><li>Rezept in Gramm</li><li>Etikett mit fett markierten Allergenen + Spuren</li><li>Datenblatt drucken</li></ol></div>
-        <div class="card col-span-4"><h3>⚖️ Rechtliche Basis</h3><p>Art. 18(2), Art. 21, Art. 30-33 (Nährwerte). Spuren-Hinweis fakultativ, aber empfohlen für Allergenmanagement.</p></div>
+        <div class="card col-span-4"><h3>⚖️ Rechtliche Basis</h3><p>Art. 18(2), Art. 21, Art. 30-33 (Nährwerte). Spuren-Hinweis fakultativ, aber empfohlen.</p></div>
       </div>
     </section>
 
@@ -153,7 +153,7 @@
         </div>
         <div class="card col-span-7">
           <h2>📊 Aktuelle Rezeptpositionen</h2>
-          <div style="max-height:280px; overflow:auto;"><table id="recipeItemsTable"><tr></div>
+          <div style="max-height:280px; overflow:auto;"><table id="recipeItemsTable"><thead><tr><th>Produkt</th><th>Menge (g)</th><th>Anteil</th><th></th></tr></thead><tbody></tbody></table></div>
           <button onclick="saveRecipe()" style="margin-top:12px;">💾 Rezept speichern</button>
           <hr><h2>📁 Ihre Rezepte</h2><div id="savedRecipesList"></div>
         </div>
@@ -197,7 +197,7 @@
 
 <script>
   // =================================================================
-  // 1. IHRE DATEN (aus sanremo_backup (25).json – vollständig)
+  // 1. IHRE KOMPLETTEN DATEN AUS sanremo_backup (25).json
   // =================================================================
   const EMBEDDED_PRODUCTS = [
     { "id": "p_milch", "name": "MILCH", "category": "Milchprodukt", "allergens": "MILCH", "spuren": "", "nutrition": { "kj": 267, "kcal": 64, "fat": 3.5, "sat": 2.3, "carb": 4.8, "sugar": 4.8, "protein": 3.3, "salt": 0.1 }, "composition": [{ "id": "c1", "name": "MILCH", "percent": 100 }] },
@@ -250,9 +250,9 @@
   ];
 
   // =================================================================
-  // 2. ANWENDUNGSLOGIK (voll funktional)
+  // 2. ANWENDUNGSLOGIK (voll funktional, alle Fehler behoben)
   // =================================================================
-  const STORAGE_KEY = 'sanremo_lmiv_spuren_final';
+  const STORAGE_KEY = 'sanremo_lmiv_spuren_final_v2';
   let state = { products: [], recipes: [], recipeDraft: [] };
 
   function sortProductComposition(prod) {
@@ -586,12 +586,13 @@
   function renderRecipeDraft() {
     const total = state.recipeDraft.reduce((s,i) => s + i.qty, 0);
     document.getElementById('recipeTotalWeight').innerHTML = `<strong>Gesamt: ${total.toFixed(1)} g</strong>`;
-    const tbody = document.getElementById('recipeItemsTable');
-    tbody.innerHTML = `<thead><tr><th>Produkt</th><th>Menge (g)</th><th>Anteil</th><th></th></tr></thead><tbody>${state.recipeDraft.map(it => {
+    const tbody = document.querySelector('#recipeItemsTable tbody');
+    if (!tbody) return;
+    tbody.innerHTML = state.recipeDraft.map(it => {
       const prod = state.products.find(p => p.id === it.productId);
       const percent = total ? (it.qty/total*100).toFixed(1) : 0;
       return `<tr><td style="border-bottom:1px solid #2a3348;">${prod?.name || '?'}</td><td style="border-bottom:1px solid #2a3348;">${it.qty.toFixed(1)} g</td><td style="border-bottom:1px solid #2a3348;">${percent}%</td><td style="border-bottom:1px solid #2a3348;"><button class="danger" onclick="removeRecipeDraftItem('${it.id}')">X</button></td></tr>`;
-    }).join('')}</tbody>`;
+    }).join('');
   }
 
   window.saveRecipe = () => {
@@ -628,6 +629,7 @@
 
   function renderSavedRecipes() {
     const container = document.getElementById('savedRecipesList');
+    if (!container) return;
     container.innerHTML = state.recipes.map(r => `<div class="recipe-item"><strong>${r.name}</strong> (${r.packaging}g) <button onclick="editRecipe('${r.id}')">Bearbeiten</button> <button class="danger" onclick="deleteRecipeById('${r.id}')">Löschen</button></div>`).join('');
     const prodSelect = document.getElementById('recipeProductSelect');
     if (prodSelect) prodSelect.innerHTML = '<option value="">Produkt wählen</option>' + state.products.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
