@@ -640,6 +640,76 @@
     <p><strong>Allergene:</strong> ${getAllergensForProduct({composition:r.items.flatMap(i=>state.products.find(p=>p.id===i.productId)?.composition||[])}).join(', ') || 'Keine'}</p><p><strong>Kann Spuren enthalten von:</strong> ${getTracesForRecipe(r).join(', ') || 'Keine'}</p>`;
     preview.innerHTML = html;
   };
+  window.validateRecipe = () => {
+    const rid = document.getElementById('validationSelect').value;
+    const box = document.getElementById('validationResult');
+    const r = state.recipes.find(x => x.id === rid);
+    if (!r) {
+      box.innerHTML = '<span class="pill error">❌ Bitte Rezept auswählen.</span>';
+      return;
+    }
+
+    const messages = [];
+    let hasError = false;
+    let hasWarning = false;
+
+    const total = r.items.reduce((s,i)=>s+i.qty,0);
+    if (!r.name || !r.name.trim()) { messages.push(['error','Rezeptname fehlt.']); hasError = true; }
+    else messages.push(['success','Rezeptname vorhanden.']);
+
+    if (!r.legalName || !r.legalName.trim()) { messages.push(['error','Verkehrsbezeichnung fehlt.']); hasError = true; }
+    else messages.push(['success','Verkehrsbezeichnung vorhanden.']);
+
+    if (!r.items || r.items.length === 0) { messages.push(['error','Keine Zutaten im Rezept.']); hasError = true; }
+    else messages.push(['success','Zutaten vorhanden: '+r.items.length+' Position(en).']);
+
+    if (total <= 0) { messages.push(['error','Gesamtgewicht ist 0 g.']); hasError = true; }
+    else messages.push(['success','Gesamtgewicht: '+total.toFixed(1).replace('.',',')+' g.']);
+
+    const badProducts = [];
+    const missingNutrition = [];
+    const missingTraceChecked = [];
+
+    for (let item of r.items || []) {
+      const prod = state.products.find(p => p.id === item.productId);
+      if (!prod) { badProducts.push('Unbekanntes Produkt'); continue; }
+      const sum = getProductPercentSum(prod);
+      if (Math.abs(sum - 100) > 0.1) badProducts.push(prod.name + ' (' + sum.toFixed(1).replace('.',',') + '%)');
+      const nu = prod.nutrition || {};
+      if ([nu.kj,nu.kcal,nu.fat,nu.sat,nu.carb,nu.sugar,nu.protein,nu.salt].some(v => v === undefined || v === null || v === '')) missingNutrition.push(prod.name);
+      if (prod.traces === undefined) missingTraceChecked.push(prod.name);
+    }
+
+    if (badProducts.length) { messages.push(['error','Produkte mit Zusammensetzung ≠ 100%: '+badProducts.join(', ')+'.']); hasError = true; }
+    else messages.push(['success','Alle Produkt-Zusammensetzungen ergeben 100%.']);
+
+    if (missingNutrition.length) { messages.push(['warning','Nährwerte prüfen bei: '+missingNutrition.join(', ')+'.']); hasWarning = true; }
+    else messages.push(['success','Nährwerte sind für alle Produkte vorhanden.']);
+
+    const nutrition = computeRecipeNutrition(r);
+    if (!nutrition) { messages.push(['error','Nährwertberechnung nicht möglich.']); hasError = true; }
+    else messages.push(['success','Nährwertberechnung funktioniert.']);
+
+    const ingredients = getWeightSortedIngredientsWithMarkup(r);
+    if (!ingredients.length) { messages.push(['error','Zutatenliste konnte nicht erzeugt werden.']); hasError = true; }
+    else messages.push(['success','Zutatenliste wird nach Gewicht sortiert.']);
+
+    const traces = getTracesForRecipe(r);
+    if (traces.length) messages.push(['success','Kann-Spuren-Hinweis vorhanden: '+traces.join(', ')+'.']);
+    else messages.push(['warning','Keine Kann-Spuren-Angabe im Rezept gefunden. Falls Hersteller Spuren angibt, im Produktfeld eintragen.']);
+
+    if (!r.storage || !r.storage.trim()) { messages.push(['warning','Aufbewahrungshinweis fehlt.']); hasWarning = true; }
+    else messages.push(['success','Aufbewahrungshinweis vorhanden.']);
+
+    if (!r.manufacturer || !r.manufacturer.trim()) { messages.push(['warning','Herstellerangabe fehlt.']); hasWarning = true; }
+    else messages.push(['success','Herstellerangabe vorhanden.']);
+
+    if (!r.mhd || !r.mhd.trim()) { messages.push(['warning','MHD / Lot Angabe fehlt.']); hasWarning = true; }
+    else messages.push(['success','MHD / Lot Angabe vorhanden.']);
+
+    const status = hasError ? '<span class="pill error">❌ NICHT FREIGEBEN</span>' : (hasWarning ? '<span class="pill warning">⚠️ PRÜFEN</span>' : '<span class="pill success">✅ FREIGABE MÖGLICH</span>');
+    box.innerHTML = '<h3>Prüfprotokoll – '+r.name+'</h3>'+status+'<hr>'+messages.map(m => '<div class="pill '+m[0]+'">'+(m[0]==='success'?'✓ ':m[0]==='warning'?'⚠ ':'❌ ')+m[1]+'</div>').join('<br>');
+  };
 
   window.printTechSheet = () => { window.print(); };
   window.exportData = () => {
