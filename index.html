@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Sanremo LMIV – Mit „Kann Spuren enthalten“</title>
+  <title>Sanremo LMIV – Komplett mit „Kann Spuren enthalten“</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -71,8 +71,8 @@
 </head>
 <body>
 <div class="app-header">
-  <h1>🍦 Sanremo LMIV – Mit „Kann Spuren enthalten“</h1>
-  <p>Zutaten nach Gewicht • Allergene **fett** • Spuren (Kann‑Spuren‑Hinweis) • Nährwerte pro 100g • QUID • Ihre Daten integriert</p>
+  <h1>🍦 Sanremo LMIV – Komplett mit „Kann Spuren enthalten“</h1>
+  <p>Zutaten nach Gewicht • Allergene **fett** • Spuren‑Hinweis • Nährwerte pro 100g • QUID • Ihre Daten integriert</p>
 </div>
 <div class="layout">
   <div class="sidebar">
@@ -130,7 +130,7 @@
       </div>
     </section>
 
-    <!-- REZEPTE (wie bisher, plus Spuren aus Produkten) -->
+    <!-- REZEPTE (mit QUID) -->
     <section id="recipes" class="screen">
       <div class="grid">
         <div class="card col-span-5">
@@ -153,7 +153,7 @@
         </div>
         <div class="card col-span-7">
           <h2>📊 Aktuelle Rezeptpositionen</h2>
-          <div style="max-height:280px; overflow:auto;"><table id="recipeItemsTable"></table></div>
+          <div style="max-height:280px; overflow:auto;"><table id="recipeItemsTable"><tr></div>
           <button onclick="saveRecipe()" style="margin-top:12px;">💾 Rezept speichern</button>
           <hr><h2>📁 Ihre Rezepte</h2><div id="savedRecipesList"></div>
         </div>
@@ -197,7 +197,7 @@
 
 <script>
   // =================================================================
-  // 1. IHRE DATEN (aus backup 25) + Spuren-Feld
+  // 1. IHRE DATEN (aus sanremo_backup (25).json – vollständig)
   // =================================================================
   const EMBEDDED_PRODUCTS = [
     { "id": "p_milch", "name": "MILCH", "category": "Milchprodukt", "allergens": "MILCH", "spuren": "", "nutrition": { "kj": 267, "kcal": 64, "fat": 3.5, "sat": 2.3, "carb": 4.8, "sugar": 4.8, "protein": 3.3, "salt": 0.1 }, "composition": [{ "id": "c1", "name": "MILCH", "percent": 100 }] },
@@ -236,20 +236,23 @@
     { "id": "1778342840511-91kepyhc", "name": "Base Gelato Paw Patrol Biscotto", "category": "Milchprodukt", "allergens": "MILCH", "spuren": "SOJA, EI, MANDELN, HASELNÜSSE, WALNÜSSE, PISTAZIEN", "nutrition": { "kj": 1751, "kcal": 415, "fat": 8.1, "sat": 6, "carb": 79, "sugar": 67, "protein": 3.1, "salt": 0.36 }, "composition": [{ "id": "bp1", "name": "Zucker", "percent": 30 }, { "id": "bp2", "name": "Maltodextrin", "percent": 18 }, { "id": "bp3", "name": "Pflanzenfasern", "percent": 12 }, { "id": "bp4", "name": "Pflanzliche Fette", "percent": 10 }, { "id": "bp5", "name": "MAGERMILCHPULVER", "percent": 8 }, { "id": "bp6", "name": "Glukosesirup", "percent": 7 }, { "id": "bp7", "name": "Dextrose", "percent": 6 }, { "id": "bp8", "name": "LAKTOSE", "percent": 4 }, { "id": "bp9", "name": "MILCHEIWEISS", "percent": 2 }, { "id": "bp10", "name": "Verdickungsmittel", "percent": 1.5 }, { "id": "bp11", "name": "Emulgatoren", "percent": 1 }, { "id": "bp12", "name": "Spirulina-Extrakt", "percent": 0.2 }, { "id": "bp13", "name": "Aromen", "percent": 0.2 }, { "id": "bp14", "name": "Salz", "percent": 0.1 }] }
   ];
 
-  const EMBEDDED_RECIPES = [ /* Mesmas receitas do backup 25, omitidas por brevidade, mas disponíveis no código original */ ];
-  // Para economizar espaço, as receitas são idênticas às do código anterior. Vou reinserir as principais.
-  // (Na prática, o usuário tem todas as receitas do backup 25. Vou colocar um conjunto mínimo para funcionar, mas o usuário pode importar o JSON completo.)
-  // Como o foco é a nova funcionalidade "Spuren", as receitas serão carregadas do backup original.
-  // Vou incluir um conjunto representativo.
-  const EMBEDDED_RECIPES_SHORT = [
-    { "id": "r_amarena", "name": "Amarena Eis REWE", "legalName": "Milchspeiseeis mit Amarena-Kirschen", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern.", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_amarena", "qty": 400 }] },
-    { "id": "r_erdbeersorbet", "name": "Erdbeersorbet REWE", "legalName": "Erdbeersorbet (50% Fruchtanteil)", "quid": "Erdbeeren 50%", "packaging": "4000", "storage": "Bei -18°C", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_erdbeeren", "qty": 2000 }, { "productId": "p_zucker", "qty": 550 }, { "productId": "p_glukosepulver", "qty": 250 }, { "productId": "p_wasser", "qty": 1150 }] }
+  const EMBEDDED_RECIPES = [
+    { "id": "r_amarena", "name": "Amarena Eis REWE", "legalName": "Milchspeiseeis mit Amarena-Kirschen", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern. Nach Auftauen nicht wieder einfrieren.", "manufacturer": "Eiscafé Sanremo, Fürst Richard Str. 1, 57319 Bad Berleburg", "mhd": "Mindestens haltbar bis: siehe Deckel. Lot: siehe Deckel.", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_amarena", "qty": 400 }] },
+    { "id": "r_cookies", "name": "COOKIES REWE", "legalName": "Milchspeiseeis mit Cookies-Paste, Keksstücken mit Kakao-Marmorierung und Schokoladenraspeln", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern.", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_cookies", "qty": 300 }, { "productId": "p_milkcocoa", "qty": 100 }, { "productId": "p_keksstuckchen", "qty": 100 }, { "productId": "p_dunkelschokoladeraspel", "qty": 100 }] },
+    { "id": "r_stracciatella", "name": "Stracciatella REWE", "legalName": "Milchspeiseeis Stracciatella mit kakaohaltiger Fettglasur", "quid": "", "packaging": "6000", "storage": "Bei -18°C lagern.", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_kakaoglasur", "qty": 300 }] },
+    { "id": "r_erdbeersorbet", "name": "Erdbeersorbet REWE", "legalName": "Erdbeersorbet (50 % Fruchtanteil)", "quid": "Erdbeeren 50%", "packaging": "4000", "storage": "Bei -18°C lagern.", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_erdbeeren", "qty": 2000 }, { "productId": "p_zucker", "qty": 550 }, { "productId": "p_glukosepulver", "qty": 250 }, { "productId": "p_wasser", "qty": 1150 }, { "productId": "1777288828144-7hoz8q8x", "qty": 20 }] },
+    { "id": "r_bananen", "name": "Bananen Eis REWE", "legalName": "Bananen sorbet (50 % Fruchtanteil)", "quid": "Banane 50%", "packaging": "6000", "storage": "Bei -18°C", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_wasser", "qty": 1100 }, { "productId": "p_banana", "qty": 2000 }, { "productId": "p_glukosepulver", "qty": 250 }, { "productId": "p_zucker", "qty": 550 }, { "productId": "1777288828144-7hoz8q8x", "qty": 20 }] },
+    { "id": "r_snickers", "name": "Snickers REWE", "legalName": "Milchspeiseeis mit Erdnusszubereitung", "quid": "", "packaging": "6000", "storage": "Bei -18°C", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "1777289533239-83jtf9wt", "qty": 500 }, { "productId": "1777289809167-7o6encx5", "qty": 100 }] },
+    { "id": "r_hanutta", "name": "Hanutta REWE", "legalName": "Milchspeiseeis Haselnuss-Kakao mit Milch-Kakao-Variegato, Keksstückchen", "quid": "", "packaging": "6000", "storage": "Bei -18°C", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 3651 }, { "productId": "p_dextrose", "qty": 657 }, { "productId": "p_sahne", "qty": 274 }, { "productId": "p_glukosepulver", "qty": 246 }, { "productId": "p_zucker", "qty": 219 }, { "productId": "p_magermilch", "qty": 179 }, { "productId": "p_base_soave", "qty": 274 }, { "productId": "p_haselnuss", "qty": 450 }, { "productId": "p_kakaopulver", "qty": 225 }, { "productId": "p_milkcocoa", "qty": 150 }, { "productId": "1777301818049-tiw3gdqa", "qty": 150 }] },
+    { "id": "r_stracciatella_serena", "name": "Stracciatella Eis SERENA", "legalName": "Milchspeiseis", "quid": "", "packaging": "6000", "storage": "Bei -18°C", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 4650 }, { "productId": "p_zucker", "qty": 791 }, { "productId": "p_dextrose", "qty": 93 }, { "productId": "1778330582999-1cbcokf4", "qty": 465 }, { "productId": "p_kakaoglasur", "qty": 250 }] },
+    { "id": "r_amarena_serena", "name": "Amarena Eis SERENA", "legalName": "Milchspeiseis Amarena Kirch Eis", "quid": "", "packaging": "6000", "storage": "Bei -18°C", "manufacturer": "Eiscafé Sanremo", "mhd": "siehe Deckel", "items": [{ "productId": "p_milch", "qty": 4650 }, { "productId": "p_zucker", "qty": 791 }, { "productId": "1778330582999-1cbcokf4", "qty": 465 }, { "productId": "p_dextrose", "qty": 93 }, { "productId": "p_amarena", "qty": 250 }] },
+    { "id": "r_erdbeer_vitrine", "name": "Erdbeersorbet VITRINE", "legalName": "SORBET", "quid": "Erdbeeren 50%", "packaging": "4000", "storage": "", "manufacturer": "Eiscafé Sanremo", "mhd": "", "items": [{ "productId": "p_wasser", "qty": 1100 }, { "productId": "p_zucker", "qty": 550 }, { "productId": "p_erdbeeren", "qty": 2000 }, { "productId": "p_supergelmix", "qty": 80 }, { "productId": "p_glukosepulver", "qty": 270 }] }
   ];
 
   // =================================================================
-  // 2. ANWENDUNGSLOGIK (angepasst für Spuren)
+  // 2. ANWENDUNGSLOGIK (voll funktional)
   // =================================================================
-  const STORAGE_KEY = 'sanremo_lmiv_spuren_v1';
+  const STORAGE_KEY = 'sanremo_lmiv_spuren_final';
   let state = { products: [], recipes: [], recipeDraft: [] };
 
   function sortProductComposition(prod) {
@@ -268,7 +271,7 @@
       } catch(e) {}
     }
     if (!state.products.length) state.products = JSON.parse(JSON.stringify(EMBEDDED_PRODUCTS));
-    if (!state.recipes.length) state.recipes = JSON.parse(JSON.stringify(EMBEDDED_RECIPES_SHORT));
+    if (!state.recipes.length) state.recipes = JSON.parse(JSON.stringify(EMBEDDED_RECIPES));
     state.products.forEach(p => {
       if (!p.composition) p.composition = [];
       if (!p.nutrition) p.nutrition = { kj:0,kcal:0,fat:0,sat:0,carb:0,sugar:0,protein:0,salt:0 };
@@ -350,7 +353,6 @@
     return Array.from(set);
   }
 
-  // Zutatenliste mit fett markierten Allergenen
   function getWeightSortedIngredientsWithMarkup(recipe) {
     const gramMap = new Map();
     for (let item of recipe.items) {
@@ -381,15 +383,12 @@
     return result;
   }
 
-  // Sammle alle Spuren-Hinweise aus den Produkten eines Rezepts (ohne Duplikate)
   function getCombinedSpuren(recipe) {
     const spurenSet = new Set();
     for (let item of recipe.items) {
       const prod = state.products.find(p => p.id === item.productId);
       if (prod && prod.spuren && prod.spuren.trim() !== "") {
-        // Normalisieren: "Kann Spuren von X enthalten" -> extrahiere X
         let spurenText = prod.spuren.trim();
-        // Entferne eventuelle einleitende Phrasen
         spurenText = spurenText.replace(/^Kann Spuren von /i, "").replace(/ enthalten\.?$/i, "");
         spurenText.split(',').forEach(s => {
           let cleaned = s.trim().toUpperCase();
@@ -426,7 +425,7 @@
     return label;
   }
 
-  // ----- UI Rendering & Interaktion (angepasst für Spuren) -----
+  // ----- UI Rendering & Interaktion -----
   function renderProductsList() {
     const container = document.getElementById('productsList');
     if (!state.products.length) { container.innerHTML = '<div class="product-item">Keine Produkte.</div>'; return; }
@@ -561,7 +560,7 @@
     document.getElementById('productPercentFill').style.width = '0%';
   }
 
-  // Rezepte (igual anterior, mas usa as novas funções)
+  // Rezepte
   window.addRecipeItem = () => {
     const pid = document.getElementById('recipeProductSelect').value;
     const qty = parseFloat(document.getElementById('recipeItemQty').value);
@@ -591,4 +590,245 @@
     tbody.innerHTML = `<thead><tr><th>Produkt</th><th>Menge (g)</th><th>Anteil</th><th></th></tr></thead><tbody>${state.recipeDraft.map(it => {
       const prod = state.products.find(p => p.id === it.productId);
       const percent = total ? (it.qty/total*100).toFixed(1) : 0;
-      return `<tr><td>${prod?.name || '?'}</td><td>${it.qty.toFixed(1)} g</
+      return `<tr><td style="border-bottom:1px solid #2a3348;">${prod?.name || '?'}</td><td style="border-bottom:1px solid #2a3348;">${it.qty.toFixed(1)} g</td><td style="border-bottom:1px solid #2a3348;">${percent}%</td><td style="border-bottom:1px solid #2a3348;"><button class="danger" onclick="removeRecipeDraftItem('${it.id}')">X</button></td></tr>`;
+    }).join('')}</tbody>`;
+  }
+
+  window.saveRecipe = () => {
+    let packagingValue = document.getElementById('recipePackaging').value;
+    if (packagingValue === 'custom') {
+      packagingValue = document.getElementById('customPackaging').value;
+      if (!packagingValue) { alert('Bitte benutzerdefinierte Größe eingeben'); return; }
+    }
+    const rid = document.getElementById('editRecipeId').value;
+    const recipe = {
+      id: rid || uid(),
+      name: document.getElementById('recipeName').value.trim(),
+      legalName: document.getElementById('recipeLegal').value.trim(),
+      quid: document.getElementById('recipeQuid').value.trim(),
+      packaging: packagingValue,
+      storage: document.getElementById('recipeStorage').value,
+      manufacturer: document.getElementById('recipeManufacturer').value,
+      mhd: document.getElementById('recipeMhd').value,
+      items: [...state.recipeDraft]
+    };
+    if (!recipe.name || !recipe.legalName) { alert("Rezeptname und Verkehrsbezeichnung sind Pflicht"); return; }
+    if (recipe.items.length === 0) { alert("Mindestens eine Zutat erforderlich"); return; }
+    const idx = state.recipes.findIndex(r => r.id === recipe.id);
+    if (idx >= 0) state.recipes[idx] = recipe;
+    else state.recipes.push(recipe);
+    state.recipeDraft = [];
+    document.getElementById('editRecipeId').value = '';
+    document.getElementById('recipeName').value = '';
+    document.getElementById('recipeLegal').value = '';
+    document.getElementById('recipeQuid').value = '';
+    renderSavedRecipes();
+    saveState();
+  };
+
+  function renderSavedRecipes() {
+    const container = document.getElementById('savedRecipesList');
+    container.innerHTML = state.recipes.map(r => `<div class="recipe-item"><strong>${r.name}</strong> (${r.packaging}g) <button onclick="editRecipe('${r.id}')">Bearbeiten</button> <button class="danger" onclick="deleteRecipeById('${r.id}')">Löschen</button></div>`).join('');
+    const prodSelect = document.getElementById('recipeProductSelect');
+    if (prodSelect) prodSelect.innerHTML = '<option value="">Produkt wählen</option>' + state.products.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+    const labelSelect = document.getElementById('labelRecipeSelect');
+    if (labelSelect) labelSelect.innerHTML = '<option value="">Rezept wählen</option>' + state.recipes.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+    const techSelect = document.getElementById('techRecipeSelect');
+    if (techSelect) techSelect.innerHTML = '<option value="">Rezept wählen</option>' + state.recipes.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+    const techProdSelect = document.getElementById('techProductSelect');
+    if (techProdSelect) techProdSelect.innerHTML = '<option value="">Produkt wählen</option>' + state.products.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+    const validSelect = document.getElementById('validationSelect');
+    if (validSelect) validSelect.innerHTML = '<option value="">Rezept wählen</option>' + state.recipes.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+  }
+
+  window.editRecipe = (id) => {
+    const r = state.recipes.find(rr => rr.id === id);
+    if (r) {
+      document.getElementById('editRecipeId').value = r.id;
+      document.getElementById('recipeName').value = r.name;
+      document.getElementById('recipeLegal').value = r.legalName;
+      document.getElementById('recipeQuid').value = r.quid || '';
+      const packagingSelect = document.getElementById('recipePackaging');
+      const customDiv = document.getElementById('customPackagingContainer');
+      const customInput = document.getElementById('customPackaging');
+      const optExists = Array.from(packagingSelect.options).some(opt => opt.value == r.packaging);
+      if (optExists) {
+        packagingSelect.value = r.packaging;
+        customDiv.style.display = 'none';
+      } else {
+        packagingSelect.value = 'custom';
+        customDiv.style.display = 'block';
+        customInput.value = r.packaging;
+      }
+      document.getElementById('recipeStorage').value = r.storage;
+      document.getElementById('recipeManufacturer').value = r.manufacturer;
+      document.getElementById('recipeMhd').value = r.mhd;
+      state.recipeDraft = JSON.parse(JSON.stringify(r.items));
+      renderRecipeDraft();
+      saveState();
+    }
+  };
+
+  window.deleteRecipeById = (id) => {
+    if (confirm("Rezept löschen?")) {
+      state.recipes = state.recipes.filter(r => r.id !== id);
+      renderSavedRecipes();
+      saveState();
+    }
+  };
+
+  window.validateRecipe = () => {
+    const rid = document.getElementById('validationSelect').value;
+    const r = state.recipes.find(rr => rr.id === rid);
+    const out = document.getElementById('validationResult');
+    if (!r) { out.innerHTML = '<span class="pill error">Rezept auswählen</span>'; return; }
+    let issues = [];
+    if (!r.legalName) issues.push('Fehlende Verkehrsbezeichnung');
+    if (!r.storage) issues.push('Fehlende Aufbewahrungshinweise');
+    if (r.items.length === 0) issues.push('Keine Zutaten');
+    let incomplete = false;
+    for (let item of r.items) {
+      const prod = state.products.find(p => p.id === item.productId);
+      if (prod && Math.abs(getProductPercentSum(prod)-100) > 0.1) incomplete = true;
+    }
+    if (incomplete) issues.push('Mindestens ein Produkt hat keine 100%-Zusammensetzung');
+    if (issues.length) out.innerHTML = issues.map(i => `<div class="pill error">⚠️ ${i}</div>`).join('');
+    else out.innerHTML = '<div class="pill success">✅ LMIV konform – Zutaten sortiert, Allergene hervorgehoben, Spuren-Hinweis vorhanden, QUID möglich.</div>';
+  };
+
+  window.generateLabel = () => {
+    const rid = document.getElementById('labelRecipeSelect').value;
+    const r = state.recipes.find(rr => rr.id === rid);
+    const preview = document.getElementById('labelPreviewText');
+    if (!r) { preview.innerText = 'Rezept wählen'; return; }
+    preview.innerText = generateLMIVLabel(r);
+  };
+
+  window.copyLabel = () => {
+    const txt = document.getElementById('labelPreviewText').innerText;
+    if (txt && txt !== 'Rezept wählen') { navigator.clipboard.writeText(txt); alert("Etikett kopiert"); }
+  };
+
+  window.downloadLabelTxt = () => {
+    const txt = document.getElementById('labelPreviewText').innerText;
+    if (txt && txt !== 'Rezept wählen') {
+      const a = document.createElement('a');
+      const blob = new Blob([txt], {type:'text/plain'});
+      a.href = URL.createObjectURL(blob);
+      a.download = 'etikett.txt';
+      a.click();
+      URL.revokeObjectURL(blob);
+    }
+  };
+
+  window.generateProductTechSheet = () => {
+    const pid = document.getElementById('techProductSelect').value;
+    const prod = state.products.find(p => p.id === pid);
+    const preview = document.getElementById('techSheetPreview');
+    if (!prod) { preview.innerHTML = '<p>Bitte Produkt wählen.</p>'; return; }
+    const sum = getProductPercentSum(prod);
+    const isComplete = Math.abs(sum-100) < 0.1;
+    const compRows = prod.composition.map(c => `<tr><td>${c.name}</td><td style="text-align:right">${c.percent.toFixed(2)}%</td></tr>`).join('');
+    const html = `<h2>${prod.name}</h2><p>Kategorie: ${prod.category} – ${isComplete ? '100% vollständig' : 'unvollständig ('+sum.toFixed(1)+'%)'}</p>
+    <h3>Zusammensetzung</h3><table border="1"><tr><th>Zutat</th><th>%</th></tr>${compRows}</table>
+    <h3>Nährwerte pro 100g</h3><table border="1"><tr><th>Energie</th><td>${prod.nutrition.kj} kJ / ${prod.nutrition.kcal} kcal</td></tr>
+    <tr><th>Fett</th><td>${prod.nutrition.fat} g (davon gesättigt ${prod.nutrition.sat} g)</td></tr>
+    <tr><th>Kohlenhydrate</th><td>${prod.nutrition.carb} g (davon Zucker ${prod.nutrition.sugar} g)</td></tr>
+    <tr><th>Eiweiß</th><td>${prod.nutrition.protein} g</td></tr>
+    <tr><th>Salz</th><td>${prod.nutrition.salt} g</td></tr></table>
+    <p><strong>Allergene:</strong> ${prod.allergens || 'Keine'}</p>
+    <p><strong>Spuren:</strong> ${prod.spuren || 'Keine Angabe'}</p>`;
+    preview.innerHTML = html;
+  };
+
+  window.generateRecipeTechSheet = () => {
+    const rid = document.getElementById('techRecipeSelect').value;
+    const r = state.recipes.find(rr => rr.id === rid);
+    const preview = document.getElementById('techSheetPreview');
+    if (!r) { preview.innerHTML = '<p>Bitte Rezept wählen.</p>'; return; }
+    const nutrition = computeRecipeNutrition(r);
+    const total = r.items.reduce((s,i)=>s+i.qty,0);
+    const ingredients = getWeightSortedIngredientsWithMarkup(r);
+    const quid = getQuidText(r);
+    const spuren = getCombinedSpuren(r);
+    const itemsTable = r.items.map(it => {
+      const prod = state.products.find(p=>p.id===it.productId);
+      const perc = total ? (it.qty/total*100).toFixed(1) : 0;
+      return `<tr><td style="border:1px solid #ccc;">${prod?.name || '?'}</td><td style="border:1px solid #ccc;">${it.qty.toFixed(1)} g</td><td style="border:1px solid #ccc;">${perc}%</td></tr>`;
+    }).join('');
+    const html = `<h2>${r.name}</h2><p>${r.legalName}${quid} | Füllmenge: ${r.packaging} g</p>
+    <h3>Zutaten (nach Gewicht, Allergene fett)</h3><p>${ingredients.join(', ')}.</p>
+    ${spuren ? `<p><strong>${spuren}</strong></p>` : ''}
+    <h3>Rezeptzusammensetzung</h3><table border="1"><tr><th>Produkt</th><th>Menge (g)</th><th>Anteil</th></tr>${itemsTable}</table>
+    <h3>Nährwerte pro 100g</h3><table border="1"><tr><th>Energie</th><td>${nutrition.kj} kJ / ${nutrition.kcal} kcal</td></tr>
+    <tr><th>Fett</th><td>${nutrition.fat} g (davon gesättigt ${nutrition.sat} g)</td></tr>
+    <tr><th>Kohlenhydrate</th><td>${nutrition.carb} g (davon Zucker ${nutrition.sugar} g)</td></tr>
+    <tr><th>Eiweiß</th><td>${nutrition.protein} g</td></tr>
+    <tr><th>Salz</th><td>${nutrition.salt} g</td></tr></table>`;
+    preview.innerHTML = html;
+  };
+
+  window.printTechSheet = () => { window.print(); };
+  window.exportData = () => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], {type:'application/json'}));
+    a.download = 'sanremo_backup.json';
+    a.click();
+  };
+  window.importData = (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = ev => {
+      try {
+        const d = JSON.parse(ev.target.result);
+        state.products = d.products || [];
+        state.recipes = d.recipes || [];
+        state.recipeDraft = [];
+        saveState();
+        alert("Import erfolgreich");
+      } catch(e) { alert("Fehler beim Import"); }
+    };
+    r.readAsText(f);
+  };
+  window.resetAll = () => {
+    if (confirm("ALLE DATEN WERDEN GELÖSCHT!")) {
+      localStorage.removeItem(STORAGE_KEY);
+      loadState();
+      saveState();
+      location.reload();
+    }
+  };
+
+  document.getElementById('recipePackaging')?.addEventListener('change', function() {
+    const customDiv = document.getElementById('customPackagingContainer');
+    customDiv.style.display = this.value === 'custom' ? 'block' : 'none';
+  });
+
+  function renderStats() {
+    const stats = document.getElementById('statsArea');
+    if (stats) stats.innerHTML = `<div>📦 ${state.products.length} Produkte</div><div>🍨 ${state.recipes.length} Rezepte</div><div>✅ Allergen-Markup aktiv</div><div>📏 Spuren-Hinweis integriert</div>`;
+    const raw = document.getElementById('rawData');
+    if (raw) raw.innerText = JSON.stringify({ products: state.products.length, recipes: state.recipes.length }, null, 2);
+  }
+
+  function renderAll() {
+    renderProductsList();
+    renderSavedRecipes();
+    renderRecipeDraft();
+    renderStats();
+  }
+
+  function switchScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`[data-screen="${id}"]`).classList.add('active');
+  }
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => switchScreen(btn.dataset.screen)));
+
+  loadState();
+  renderAll();
+</script>
+</body>
+</html>
